@@ -1,3 +1,4 @@
+import com.melloware.jintellitype.HotkeyListener;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.event.EventHandler;
@@ -6,6 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.image.Image;
@@ -15,6 +17,8 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 public class menuController {
 
@@ -26,6 +30,8 @@ public class menuController {
     private TableColumn<Sound, String> keybind;
     @FXML
     public Pane pane;
+    @FXML
+    public CheckBox filter;
 
     public EventHandler<KeyEvent> bindHotkey = new EventHandler<KeyEvent>() {
 
@@ -57,7 +63,15 @@ public class menuController {
         // songlist click listener
         name.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(cellData.getValue().name));
         keybind.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(cellData.getValue().keybind));
-        this.sound_list.setItems(FXCollections.observableList(Soundboard.sounds));
+        if (filter.isSelected()) {
+
+            ArrayList<Sound> tmp = new ArrayList<Sound>(Soundboard.sounds);
+            for (Sound s : tmp)
+                if (s.keybind.equals(""))
+                    tmp.remove(s);
+            this.sound_list.setItems(FXCollections.observableList(tmp));
+        } else
+            this.sound_list.setItems(FXCollections.observableList(Soundboard.sounds));
     }
 
     public menuController show() {
@@ -74,7 +88,7 @@ public class menuController {
             mainStage.setX(primaryScreenBounds.getMinX() + primaryScreenBounds.getWidth() - 600);
             mainStage.setY(primaryScreenBounds.getMinY() + primaryScreenBounds.getHeight() - 430);
             mainStage.setScene(new Scene(root));
-            mainStage.getIcons().add(new Image(getClass().getResourceAsStream("resources/player.png")));
+            mainStage.getIcons().add(new Image(getClass().getResourceAsStream("resources/sound.png")));
             mainStage.setTitle("SoundBored");
             mainStage.show();
 
@@ -96,6 +110,31 @@ public class menuController {
         if (sound_list.getSelectionModel().getSelectedItem() != null)
             sound_list.getSelectionModel().getSelectedItem().play();
     }
+
+    public final void handleUnbindPress() {
+        if (sound_list.getSelectionModel().getSelectedItem() != null) {
+            HotKeyInterface.unbind(sound_list.getSelectionModel().getSelectedItem());
+            sound_list.refresh();
+        }
+    }
+
+    public final void handleFilter() {
+
+        if (filter.isSelected()) {
+
+            ArrayList<Sound> tmp = new ArrayList<Sound>(Soundboard.sounds);
+            for (Iterator<Sound> iterator = tmp.iterator(); iterator.hasNext(); ) {
+                if (iterator.next().keybind.equals("")) {
+                    iterator.remove();
+                }
+            }
+            this.sound_list.setItems(FXCollections.observableList(tmp));
+        } else
+            this.sound_list.setItems(FXCollections.observableList(Soundboard.sounds));
+
+        this.sound_list.refresh();
+    }
+
 }
 
 

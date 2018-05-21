@@ -97,7 +97,6 @@ public class Soundboard {
 
 
     public static void quit() {
-        JIntellitype.getInstance().cleanUp();
         HotKeyInterface.saveSettings();
         System.exit(0);
     }

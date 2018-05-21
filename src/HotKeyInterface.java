@@ -143,6 +143,8 @@ public class HotKeyInterface extends JFrame implements HotkeyListener, Intellity
         JIntellitype.getInstance().unregisterHotKey(s.id);
         s.keybind = "";
 
+        saveSettings();
+
     }
 
 }

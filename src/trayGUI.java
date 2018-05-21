@@ -18,7 +18,7 @@ public class trayGUI {
             System.out.println("SystemTray is not supported");
             return;
         }
-        trayIcon = new TrayIcon(ImageIO.read(getClass().getResource(("resources/player.png"))));
+        trayIcon = new TrayIcon(ImageIO.read(getClass().getResource(("resources/sound.png"))));
         trayIcon.setImageAutoSize(true);
 
         // Create a popup menuGUI components
