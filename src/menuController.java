@@ -1,4 +1,3 @@
-import com.melloware.jintellitype.HotkeyListener;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.event.EventHandler;
@@ -51,11 +50,13 @@ public class menuController {
             if (event.isMetaDown())
                 s = "WIN+" + s;
 
-            HotKeyInterface.registerHotkey(sound_list.getSelectionModel().getSelectedItem(), s);
+            HotKeyInterface.bind(sound_list.getSelectionModel().getSelectedItem(), s);
             sound_list.getSelectionModel().clearSelection();
             sound_list.refresh();
             HotKeyInterface.saveSettings();
             pane.setOnKeyPressed(e -> e.consume());
+
+            HotKeyInterface.bindAll();
         }
     };
 
@@ -103,6 +104,7 @@ public class menuController {
     }
 
     public final void handleKeyBindPress() {
+        HotKeyInterface.unbindAll();
         pane.setOnKeyPressed(bindHotkey);
     }
 

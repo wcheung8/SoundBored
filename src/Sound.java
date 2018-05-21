@@ -12,7 +12,7 @@ public class Sound {
         count++;
         if (HotKeyInterface.prop.containsKey(n)) {
             String keycode = HotKeyInterface.prop.getProperty(n);
-            HotKeyInterface.registerHotkey(this, keycode);
+            HotKeyInterface.bind(this, keycode);
         } else {
             this.keybind = "";
         }

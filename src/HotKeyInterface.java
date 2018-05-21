@@ -67,7 +67,7 @@ public class HotKeyInterface extends JFrame implements HotkeyListener, Intellity
         }
     }
 
-    public static void registerHotkey(Sound s, int modifiers, int keyCode) {
+    public static void bind(Sound s, int modifiers, int keyCode) {
         try {
 
             String hotkey = hotKeytoText(modifiers, keyCode);
@@ -90,7 +90,7 @@ public class HotKeyInterface extends JFrame implements HotkeyListener, Intellity
         }
     }
 
-    public static void registerHotkey(Sound s, String hotkey) {
+    public static void bind(Sound s, String hotkey) {
         try {
 
             if (keyToSound.containsKey(hotkey)) {
@@ -145,6 +145,19 @@ public class HotKeyInterface extends JFrame implements HotkeyListener, Intellity
 
         saveSettings();
 
+    }
+
+    public static void bindAll() {
+        for (Sound s : Soundboard.sounds) {
+            if (!s.keybind.equals(""))
+                JIntellitype.getInstance().registerHotKey(s.id, s.keybind);
+        }
+    }
+
+    public static void unbindAll() {
+        for (Sound s : Soundboard.sounds) {
+            JIntellitype.getInstance().unregisterHotKey(s.id);
+        }
     }
 
 }
